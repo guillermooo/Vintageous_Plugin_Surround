@@ -41,6 +41,14 @@ def do_post_load():
 
 # actual command implementation
 class _vi_plug_y_s(sublime_plugin.TextCommand):
+    PAIRS = {
+        '(': ('(', ')'),
+        ')': ('( ', ' )'),
+        '[': ('[', ']'),
+        ']': ('[ ', ' ]'),
+        '{': ('{', '}'),
+        '}': ('{ ', ' }'),
+    }
     def run(self, edit, mode=None, surround_with='"'):
         def f(view, s):
             if mode == _MODE_INTERNAL_NORMAL:
@@ -52,5 +60,6 @@ class _vi_plug_y_s(sublime_plugin.TextCommand):
             regions_transformer(self.view, f)
 
     def surround(self, edit, s, surround_with):
-        self.view.insert(edit, s.b, surround_with)
-        self.view.insert(edit, s.a, surround_with)
+        open_, close_ = _vi_plug_y_s.PAIRS.get(surround_with, (surround_with, surround_with))
+        self.view.insert(edit, s.b, close_)
+        self.view.insert(edit, s.a, open_)
