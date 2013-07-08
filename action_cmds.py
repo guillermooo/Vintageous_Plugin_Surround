@@ -66,8 +66,9 @@ class _vi_plug_y_s(sublime_plugin.TextCommand):
     def surround(self, edit, s, surround_with):
         open_, close_ = _vi_plug_y_s.PAIRS.get(surround_with, (surround_with, surround_with))
 
+        # Takes <q class="foo"> and produces: <q class="foo">text</q>
         if open_.startswith('<'):
-            name = open_[1:].strip()[:-1]
+            name = open_[1:].strip()[:-1].strip()
             name = name.split(' ', 1)[0]
             self.view.insert(edit, s.b, "</{0}>".format(name))
             self.view.insert(edit, s.a, surround_with)
