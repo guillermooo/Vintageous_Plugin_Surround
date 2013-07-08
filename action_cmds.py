@@ -7,6 +7,8 @@ from Vintageous.vi.constants import MODE_VISUAL
 from Vintageous.vi.constants import DIGRAPH_ACTION
 from Vintageous.vi.constants import INPUT_AFTER_MOTION
 
+import re
+
 
 plugin_manager = None
 
@@ -15,7 +17,9 @@ def plugin_loaded():
 
 
 def validate_vi_plug_s_y(in_):
-    return len(in_) == 1
+    single = len(in_) == 1 and in_ != '<'
+    tag = re.match('<.*?>', in_)
+    return single or tag
 
 
 def do_post_load():
@@ -61,5 +65,13 @@ class _vi_plug_y_s(sublime_plugin.TextCommand):
 
     def surround(self, edit, s, surround_with):
         open_, close_ = _vi_plug_y_s.PAIRS.get(surround_with, (surround_with, surround_with))
+
+        if open_.startswith('<'):
+            name = open_[1:].strip()[:-1]
+            name = name.split(' ', 1)[0]
+            self.view.insert(edit, s.b, "</{0}>".format(name))
+            self.view.insert(edit, s.a, surround_with)
+            return
+
         self.view.insert(edit, s.b, close_)
         self.view.insert(edit, s.a, open_)
