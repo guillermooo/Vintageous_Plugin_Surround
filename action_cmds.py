@@ -10,8 +10,6 @@ from Vintageous.vi.constants import INPUT_AFTER_MOTION
 import re
 
 
-plugin_manager = None
-
 def plugin_loaded():
     sublime.set_timeout(do_post_load, 75)
 
@@ -23,9 +21,7 @@ def validate_vi_plug_s_y(in_):
 
 
 def do_post_load():
-    global plugin_manager
-    from Vintageous.state import plugin_manager as pm
-    plugin_manager = pm
+    from Vintageous.state import plugin_manager
 
     # register action for action parsing
     @plugin_manager.register_action
