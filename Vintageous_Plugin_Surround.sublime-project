@@ -1,0 +1,34 @@
+{
+	"build_systems":
+	[
+		{
+			"name": "Vintageous_Plugin_Surround: Debug",
+			"shell_cmd": "./build.sh",
+			"windows":
+			{
+				"shell_cmd": "powershell -noninteractive -file \"$project_path\\bin\\Build.ps1\""
+			},
+			"working_dir": "${project_path}"
+		},
+		{
+			"name": "Vintageous_Plugin_Surround: Release",
+			"shell_cmd": "./build.sh --release release",
+			"windows":
+			{
+				"shell_cmd": "powershell -noninteractive -file \"$project_path\\bin\\Build.ps1\" -release -dontupload"
+			},
+			"working_dir": "${project_path}"
+		}
+	],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\Guillermo\\Documents\\Dev\\Sublime Packages\\Vintageous_Plugin_Surround"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\Guillermo\\Documents\\Dev\\Sublime Packages\\Vintageous"
+		}
+	]
+}
