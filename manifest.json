@@ -3,6 +3,7 @@
 	"include": {
 		"dev": [
 			["*.*", ["*builder.py",
+					 "*build.sh",
 					 "*.sublime-workspace",
 					 "*.sublime-project",
 					 "*.ps1",
