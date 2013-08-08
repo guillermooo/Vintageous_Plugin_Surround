@@ -1,0 +1,24 @@
+{
+	"name": "Vintageous_Plugin_Surround",
+	"include": {
+		"dev": [
+			["*.*", ["*builder.py",
+					 "*.sublime-workspace",
+					 "*.sublime-project",
+					 "*.ps1",
+					 "*.hg*",
+					 "*manifest.json"]
+			]
+		],
+		"release": [
+			["*.*", ["*builder.py",
+					 "*build.sh",
+					 "*.sublime-workspace",
+					 "*.sublime-project",
+					 "*.ps1",
+					 "*.hg*",
+					 "*manifest.json"]
+			]
+		]
+	}
+}
