@@ -24,11 +24,11 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "C:\\Users\\Guillermo\\Documents\\Dev\\Sublime Packages\\Vintageous_Plugin_Surround"
+			"path": "."
 		},
 		{
 			"follow_symlinks": true,
-			"path": "C:\\Users\\Guillermo\\Documents\\Dev\\Sublime Packages\\Vintageous"
+			"path": "..\\Vintageous"
 		}
 	]
 }
