@@ -1,4 +1,4 @@
-Vintageous.Plugin.Surround
+Vintageous_Plugin_Surround
 ==========================
 
 Experimental plugin for Vintageous
