@@ -138,9 +138,15 @@ class _vi_plug_c_s(sublime_plugin.TextCommand):
         open_, close_ = _vi_plug_c_s.PAIRS.get(old, (old, old))
         new_open, new_close = _vi_plug_c_s.PAIRS.get(new, (new, new))
 
-        # brute force
-        next_ = self.view.find(close_, s.b, sublime.LITERAL)
-        prev_ = reverse_search(self.view, open_, end=s.b, start=0, flags=sublime.LITERAL)
+        if len(open_) == 1 and open_ == 't':
+            open_, close_ = ('<.*?>', '</.*?>')
+            next_ = self.view.find(close_, s.b)
+            prev_ = reverse_search(self.view, open_, end=s.b, start=0)
+        else:
+            # brute force
+            next_ = self.view.find(close_, s.b, sublime.LITERAL)
+            prev_ = reverse_search(self.view, open_, end=s.b, start=0, flags=sublime.LITERAL)
+        
         if not (next_ and prev_):
             return
 
@@ -171,9 +177,15 @@ class _vi_plug_d_s(sublime_plugin.TextCommand):
         old, new = (replace_what, '')
         open_, close_ = _vi_plug_c_s.PAIRS.get(old, (old, old))
 
-        # brute force
-        next_ = self.view.find(close_, s.b, sublime.LITERAL)
-        prev_ = reverse_search(self.view, open_, end=s.b, start=0, flags=sublime.LITERAL)
+        if len(open_) == 1 and open_ == 't':
+            open_, close_ = ('<.*?>', '</.*?>')
+            next_ = self.view.find(close_, s.b)
+            prev_ = reverse_search(self.view, open_, end=s.b, start=0)
+        else:
+            # brute force
+            next_ = self.view.find(close_, s.b, sublime.LITERAL)
+            prev_ = reverse_search(self.view, open_, end=s.b, start=0, flags=sublime.LITERAL)
+        
         if not (next_ and prev_):
             return
 
