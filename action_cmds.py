@@ -15,7 +15,7 @@ from Vintageous.vi.utils import regions_transformer
 import re
 
 
-@plugins.register(keys=[('ys', (modes.NORMAL, modes.OPERATOR_PENDING))])
+@plugins.register(keys=[('ys', (modes.NORMAL,))])
 class ViSurround(ViOperatorDef):
     def __init__(self, *args, **kwargs):
         ViOperatorDef.__init__(self, *args, **kwargs)
@@ -48,6 +48,21 @@ class ViSurround(ViOperatorDef):
         cmd['action_args'] = {'mode': state.mode,
                               'surround_with': self.inp}
         return cmd
+
+
+@plugins.register(keys=[('S', (modes.VISUAL, modes.VISUAL_BLOCK))])
+class ViSurroundVisual(ViSurround):
+    def __init__(self, *args, **kwargs):
+        ViOperatorDef.__init__(self, *args, **kwargs)
+
+        self.motion_required = False
+
+        self.input_parser = parser_def(
+                            command=inputs.one_char,
+                            interactive_command=None,
+                            input_param=None,
+                            on_done=None,
+                            type=input_types.INMEDIATE)
 
 
 @plugins.register(keys=[('ds', (modes.NORMAL, modes.OPERATOR_PENDING))])
@@ -93,12 +108,11 @@ class ViChangeSurround(ViOperatorDef):
         self.updates_xpos = True
         self.repeatable = True
 
-        self.input_parser = parser_def(
-                            command=inputs.one_char,
-                            interactive_command=None,
-                            input_param=None,
-                            on_done=None,
-                            type=input_types.INMEDIATE)
+        self.input_parser = parser_def(command=inputs.one_char,
+                                       interactive_command=None,
+                                       input_param=None,
+                                       on_done=None,
+                                       type=input_types.INMEDIATE)
 
     @property
     def accept_input(self):
@@ -116,6 +130,7 @@ class ViChangeSurround(ViOperatorDef):
         return cmd
 
 
+
 # actual command implementation
 class _vi_plug_y_s(ViTextCommandBase):
     PAIRS = {
@@ -131,13 +146,18 @@ class _vi_plug_y_s(ViTextCommandBase):
             if mode == modes.INTERNAL_NORMAL:
                 self.surround(edit, s, surround_with)
                 return sublime.Region(s.begin())
+            elif mode in (modes.VISUAL, modes.VISUAL_BLOCK):
+                self.surround(edit, s, surround_with)
+                return sublime.Region(s.begin())
+
             return s
 
-        if not motion:
+        if not motion and not self.view.has_non_empty_selection_region():
             self.enter_normal_mode(mode)
             raise ValueError('motion required')
 
-        self.view.run_command(motion['motion'], motion['motion_args'])
+        if mode == modes.INTERNAL_NORMAL:
+            self.view.run_command(motion['motion'], motion['motion_args'])
 
         if surround_with:
             regions_transformer(self.view, f)
