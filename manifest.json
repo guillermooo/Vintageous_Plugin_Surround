@@ -9,7 +9,8 @@
 					 "*.ps1",
 					 "*.hg*",
 					 "*manifest.json"]
-			]
+			],
+			["tests/*.py", []]
 		],
 		"release": [
 			["*.*", ["*builder.py",

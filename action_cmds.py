@@ -44,7 +44,7 @@ class ViSurround(ViOperatorDef):
 
     def translate(self, state):
         cmd = {}
-        cmd['action'] = '_vi_plug_y_s'
+        cmd['action'] = '_vi_plug_ys'
         cmd['action_args'] = {'mode': state.mode,
                               'surround_with': self.inp}
         return cmd
@@ -53,7 +53,7 @@ class ViSurround(ViOperatorDef):
 @plugins.register(keys=[('S', (modes.VISUAL, modes.VISUAL_BLOCK))])
 class ViSurroundVisual(ViSurround):
     def __init__(self, *args, **kwargs):
-        ViOperatorDef.__init__(self, *args, **kwargs)
+        ViSurround.__init__(self, *args, **kwargs)
 
         self.motion_required = False
 
@@ -93,7 +93,7 @@ class ViDeleteSurround(ViOperatorDef):
 
     def translate(self, state):
         cmd = {}
-        cmd['action'] = '_vi_plug_d_s'
+        cmd['action'] = '_vi_plug_ds'
         cmd['action_args'] = {'mode': state.mode,
                               'replace_what': self.inp}
         return cmd
@@ -124,7 +124,7 @@ class ViChangeSurround(ViOperatorDef):
 
     def translate(self, state):
         cmd = {}
-        cmd['action'] = '_vi_plug_c_s'
+        cmd['action'] = '_vi_plug_cs'
         cmd['action_args'] = {'mode': state.mode,
                               'replace_what': self.inp}
         return cmd
@@ -132,7 +132,7 @@ class ViChangeSurround(ViOperatorDef):
 
 
 # actual command implementation
-class _vi_plug_y_s(ViTextCommandBase):
+class _vi_plug_ys(ViTextCommandBase):
     PAIRS = {
         '(': ('(', ')'),
         ')': ('( ', ' )'),
@@ -165,7 +165,7 @@ class _vi_plug_y_s(ViTextCommandBase):
         self.enter_normal_mode(mode)
 
     def surround(self, edit, s, surround_with):
-        open_, close_ = _vi_plug_y_s.PAIRS.get(surround_with, (surround_with, surround_with))
+        open_, close_ = _vi_plug_ys.PAIRS.get(surround_with, (surround_with, surround_with))
 
         # Takes <q class="foo"> and produces: <q class="foo">text</q>
         if open_.startswith('<'):
@@ -179,7 +179,7 @@ class _vi_plug_y_s(ViTextCommandBase):
         self.view.insert(edit, s.a, open_)
 
 
-class _vi_plug_c_s(sublime_plugin.TextCommand):
+class _vi_plug_cs(sublime_plugin.TextCommand):
     PAIRS = {
         '(': ('(', ')'),
         ')': ('( ', ' )'),
@@ -200,8 +200,8 @@ class _vi_plug_c_s(sublime_plugin.TextCommand):
 
     def replace(self, edit, s, replace_what):
         old, new = tuple(replace_what)
-        open_, close_ = _vi_plug_c_s.PAIRS.get(old, (old, old))
-        new_open, new_close = _vi_plug_c_s.PAIRS.get(new, (new, new))
+        open_, close_ = _vi_plug_cs.PAIRS.get(old, (old, old))
+        new_open, new_close = _vi_plug_cs.PAIRS.get(new, (new, new))
 
         if len(open_) == 1 and open_ == 't':
             open_, close_ = ('<.*?>', '</.*?>')
@@ -219,7 +219,7 @@ class _vi_plug_c_s(sublime_plugin.TextCommand):
         self.view.replace(edit, prev_, new_open)
 
 
-class _vi_plug_d_s(sublime_plugin.TextCommand):
+class _vi_plug_ds(sublime_plugin.TextCommand):
     PAIRS = {
         '(': ('(', ')'),
         ')': ('( ', ' )'),
@@ -240,7 +240,7 @@ class _vi_plug_d_s(sublime_plugin.TextCommand):
 
     def replace(self, edit, s, replace_what):
         old, new = (replace_what, '')
-        open_, close_ = _vi_plug_c_s.PAIRS.get(old, (old, old))
+        open_, close_ = _vi_plug_cs.PAIRS.get(old, (old, old))
 
         if len(open_) == 1 and open_ == 't':
             open_, close_ = ('<.*?>', '</.*?>')
