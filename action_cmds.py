@@ -15,7 +15,7 @@ from Vintageous.vi.utils import regions_transformer
 import re
 
 
-@plugins.register(keys=[('ys', (modes.NORMAL,))])
+@plugins.register(seq='ys', modes=(modes.NORMAL,))
 class ViSurround(ViOperatorDef):
     def __init__(self, *args, **kwargs):
         ViOperatorDef.__init__(self, *args, **kwargs)
@@ -50,7 +50,7 @@ class ViSurround(ViOperatorDef):
         return cmd
 
 
-@plugins.register(keys=[('S', (modes.VISUAL, modes.VISUAL_BLOCK))])
+@plugins.register(seq='S', modes=(modes.VISUAL, modes.VISUAL_BLOCK))
 class ViSurroundVisual(ViSurround):
     def __init__(self, *args, **kwargs):
         ViSurround.__init__(self, *args, **kwargs)
@@ -65,7 +65,7 @@ class ViSurroundVisual(ViSurround):
                             type=input_types.INMEDIATE)
 
 
-@plugins.register(keys=[('ds', (modes.NORMAL, modes.OPERATOR_PENDING))])
+@plugins.register(seq='ds', modes=(modes.NORMAL, modes.OPERATOR_PENDING))
 class ViDeleteSurround(ViOperatorDef):
     def __init__(self, *args, **kwargs):
         ViOperatorDef.__init__(self, *args, **kwargs)
@@ -99,7 +99,7 @@ class ViDeleteSurround(ViOperatorDef):
         return cmd
 
 
-@plugins.register(keys=[('cs', (modes.NORMAL, modes.OPERATOR_PENDING))])
+@plugins.register(seq='cs', modes=(modes.NORMAL, modes.OPERATOR_PENDING))
 class ViChangeSurround(ViOperatorDef):
     def __init__(self, *args, **kwargs):
         ViOperatorDef.__init__(self, *args, **kwargs)
